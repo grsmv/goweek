@@ -1,8 +1,8 @@
-package main
+package goweek
 
 import (
-	"errors"
 	"time"
+	"errors"
 )
 
 type Week struct {
@@ -22,7 +22,7 @@ func NewWeek(params ...int) (*Week, error) {
 	} else {
 		var (
 			week                = initWeek(params...)
-			approximateDay      = week.Number * 7
+			approximateDay      = (week.Number-1) * 7  // converting from human-readable to machine notation
 			approximateFirstDay = 0
 			commonNumberOfDays  = 0
 			monthNumber         = 0
@@ -73,7 +73,7 @@ func (week *Week) Previous() Week {
 func initWeek(params ...int) Week {
 	var week = Week{
 		Year:   params[0],
-		Number: params[1] - 1, // converting from human-readable to machine notation
+		Number: params[1],
 	}
 
 	if len(params) < 3 {
@@ -102,15 +102,4 @@ func numberOfDays(year int) (numbers []int) {
 		numbers[1] = 29
 	}
 	return
-}
-
-func main() {
-	week, err := NewWeek(2015, 54)
-	if err == nil {
-		for _, day := range week.Days {
-			println(day.String())
-		}
-	} else {
-		println(err.Error())
-	}
 }

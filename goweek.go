@@ -62,12 +62,30 @@ func NewWeek(params ...int) (*Week, error) {
 	}
 }
 
-func (week *Week) Next() Week {
-	return *week
+func (week *Week) Next() (*Week, error) {
+	var newYear, newWeek int
+	if week.Number+1 > 53 {
+		newYear = week.Year + 1
+		newWeek = 1
+	} else {
+		newYear = week.Year
+		newWeek = week.Number + 1
+	}
+	w, e := NewWeek(newYear, newWeek)
+	return w, e
 }
 
-func (week *Week) Previous() Week {
-	return *week
+func (week *Week) Previous() (*Week, error) {
+	var newYear, newWeek int
+	if week.Number-1 < 1 {
+		newYear = week.Year - 1
+		newWeek = 53
+	} else {
+		newYear = week.Year
+		newWeek = week.Number - 1
+	}
+	w, e := NewWeek(newYear, newWeek)
+	return w, e
 }
 
 func initWeek(params ...int) Week {

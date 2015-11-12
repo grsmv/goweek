@@ -16,7 +16,7 @@ var expectedDays = []time.Time{
 	time.Date(2015, 11, 14, 0, 0, 0, 0, time.UTC),
 }
 
-var expectedDaysWithMondayAsFirstDayOfTheWeek = []time.Time{
+var expectedDaysWithMondayAsFirstDayOfTheWeek = []time.Time {
 	time.Date(2015, 11, 9, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 10, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 11, 0, 0, 0, 0, time.UTC),
@@ -24,6 +24,48 @@ var expectedDaysWithMondayAsFirstDayOfTheWeek = []time.Time{
 	time.Date(2015, 11, 13, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 14, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 15, 0, 0, 0, 0, time.UTC),
+}
+
+var expectedDaysForNextWeek = []time.Time {
+	time.Date(2015, 11, 15, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 16, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 17, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 18, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 19, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 20, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 21, 0, 0, 0, 0, time.UTC),
+}
+
+// assuming that in case of 2015 year last week of 2015 in first week of 2016
+var expectedDaysForNextWeekWithYearSwitch = []time.Time{
+	time.Date(2015, 12, 27, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 12, 28, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 12, 29, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 12, 30, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 12, 31, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  1,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  2,  0, 0, 0, 0, time.UTC),
+}
+
+var expectedDaysForPreviousWeek = []time.Time{
+	time.Date(2015, 11, 1, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 2, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 3, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 4, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 5, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 6, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 11, 7, 0, 0, 0, 0, time.UTC),
+}
+
+// assuming that in case of 2015 year first week of 2015 in last week of 2014
+var expectedDaysForPreviousWeekWithYearSwitch = []time.Time{
+	time.Date(2014, 12, 28, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 29, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 30, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 31, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1,  1,  0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1,  2,  0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1,  3,  0, 0, 0, 0, time.UTC),
 }
 
 func Test_NormalUsage(t *testing.T) {
@@ -74,5 +116,41 @@ func Test_ErrorThrowing(t *testing.T) {
 	var _, errorD = NewWeek(-1, 53)
 	if errorD.Error() != "NewWeek(): year can't be less than zero" {
 		t.Error("Error expected when passing incorrect year number")
+	}
+}
+
+func Test_NextWeek (t *testing.T) {
+	var week, _ = NewWeek(2015, 46)
+	var nextWeek, _ = week.Next()
+	if !reflect.DeepEqual(expectedDaysForNextWeek, nextWeek.Days) {
+		t.Errorf("Unexpected Week.Next(), \n expected %v, \n given %v", expectedDaysForNextWeek, nextWeek.Days)
+	}
+
+	var weekA, _ = NewWeek(2015, 53)
+	var nextWeekA, errA = weekA.Next()
+	if !reflect.DeepEqual(expectedDaysForNextWeekWithYearSwitch, nextWeekA.Days) {
+		t.Errorf("Unexpected Week.Next() with year switch, \n expected %v, \n given %v", expectedDaysForNextWeekWithYearSwitch, nextWeekA.Days)
+	}
+
+	if errA != nil {
+		t.Error(errA.Error())
+	}
+}
+
+func Test_PreviousWeek (t *testing.T) {
+	var week, _ = NewWeek(2015, 46)
+	var previousWeek, _ = week.Previous()
+	if !reflect.DeepEqual(expectedDaysForPreviousWeek, previousWeek.Days) {
+		t.Errorf("Unexpected Week.Previous(), \n expected %v, \n given %v", expectedDaysForPreviousWeek, previousWeek.Days)
+	}
+
+	var weekA, _ = NewWeek(2015, 1)
+	var previousWeekA, errA = weekA.Previous()
+	if !reflect.DeepEqual(expectedDaysForPreviousWeekWithYearSwitch, previousWeekA.Days) {
+		t.Errorf("Unexpected Week.Previous() with year switch, \n expected %v, \n given %v", expectedDaysForPreviousWeekWithYearSwitch, previousWeekA.Days)
+	}
+
+	if errA != nil {
+		t.Error(errA.Error())
 	}
 }

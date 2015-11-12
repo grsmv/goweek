@@ -1,33 +1,35 @@
 package main
 
-import "time"
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 type Week struct {
-	Days []time.Time
-	Year int
-	Number int
+	Days     []time.Time
+	Year     int
+	Number   int
 	FirstDay int
 }
 
 func NewWeek(params ...int) (*Week, error) {
-	if (len(params) < 2) {
+	if len(params) < 2 {
 		return &Week{}, errors.New("NewWeek(): too few arguments, specify year and number of week")
-	} else if (params[0] < 0) {
+	} else if params[0] < 0 {
 		return &Week{}, errors.New("NewWeek(): year can't be less than zero")
-	} else if (params[1] < 1 || params[1] > 53) {
+	} else if params[1] < 1 || params[1] > 53 {
 		return &Week{}, errors.New("NewWeek(): number of week can't be less than 1 or greater than 53")
 	} else {
 		var (
-			week = initWeek(params...)
-			approximateDay = week.Number * 7
+			week                = initWeek(params...)
+			approximateDay      = week.Number * 7
 			approximateFirstDay = 0
-			commonNumberOfDays = 0
-			monthNumber = 0
+			commonNumberOfDays  = 0
+			monthNumber         = 0
 		)
 
 		for index, numberOfDaysInMonth := range numberOfDays(week.Year) {
-			if approximateDay >= commonNumberOfDays && approximateDay <= commonNumberOfDays + numberOfDaysInMonth {
+			if approximateDay >= commonNumberOfDays && approximateDay <= commonNumberOfDays+numberOfDaysInMonth {
 				monthNumber = index
 				break
 			} else {
@@ -50,9 +52,9 @@ func NewWeek(params ...int) (*Week, error) {
 
 		// composing week listing
 		var estimatedDate = time.Date(week.Year, time.Month(monthNumber+1), approximateFirstDay, 0, 0, 0, 0, time.UTC)
-		var estimatedFirstDayOfTheWeek = estimatedDate.AddDate(0, 0, -1 * int(estimatedDate.Weekday()))
+		var estimatedFirstDayOfTheWeek = estimatedDate.AddDate(0, 0, -1*int(estimatedDate.Weekday()))
 
-		for i := week.FirstDay; i <= week.FirstDay + 6; i++ {
+		for i := week.FirstDay; i <= week.FirstDay+6; i++ {
 			week.Days = append(week.Days, estimatedFirstDayOfTheWeek.AddDate(0, 0, i))
 		}
 
@@ -69,9 +71,9 @@ func (week *Week) Previous() Week {
 }
 
 func initWeek(params ...int) Week {
-	var week = Week {
-		Year: params[0],
-		Number: params[1]-1, // converting from human-readable to machine notation
+	var week = Week{
+		Year:   params[0],
+		Number: params[1] - 1, // converting from human-readable to machine notation
 	}
 
 	if len(params) < 3 {
@@ -82,20 +84,20 @@ func initWeek(params ...int) Week {
 	return week
 }
 
-func isLeapYear (year int) bool {
-	if year % 4 > 0 {
+func isLeapYear(year int) bool {
+	if year%4 > 0 {
 		return false
-	} else if year % 100 > 0 {
+	} else if year%100 > 0 {
 		return true
-	} else if year % 400 > 0 {
+	} else if year%400 > 0 {
 		return false
 	} else {
 		return true
 	}
 }
 
-func numberOfDays (year int) (numbers []int) {
-	numbers = []int {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+func numberOfDays(year int) (numbers []int) {
+	numbers = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 	if isLeapYear(year) {
 		numbers[1] = 29
 	}

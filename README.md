@@ -11,6 +11,9 @@ Simple library for working with week entities for Go programming language. Rewri
 import "github.com/grsmv/goweek"
 
 // initializing goweek.Week struct:
+//                          year 
+//                          |     week number (starting from 1)
+//                          |     |
 week, err := goweek.NewWeek(2015, 46)
 
 // retrieving slice with days (`time.Time` instances) for a given week:

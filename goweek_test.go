@@ -38,13 +38,13 @@ var expectedDaysForNextWeek = []time.Time {
 
 // assuming that in case of 2015 year last week of 2015 in first week of 2016
 var expectedDaysForNextWeekWithYearSwitch = []time.Time{
-	time.Date(2015, 12, 27, 0, 0, 0, 0, time.UTC),
-	time.Date(2015, 12, 28, 0, 0, 0, 0, time.UTC),
-	time.Date(2015, 12, 29, 0, 0, 0, 0, time.UTC),
-	time.Date(2015, 12, 30, 0, 0, 0, 0, time.UTC),
-	time.Date(2015, 12, 31, 0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  1,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  2,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  3,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  4,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  5,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  6,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  7,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  8,  0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1,  9,  0, 0, 0, 0, time.UTC),
 }
 
 var expectedDaysForPreviousWeek = []time.Time{
@@ -59,13 +59,13 @@ var expectedDaysForPreviousWeek = []time.Time{
 
 // assuming that in case of 2015 year first week of 2015 in last week of 2014
 var expectedDaysForPreviousWeekWithYearSwitch = []time.Time{
-	time.Date(2014, 12, 28, 0, 0, 0, 0, time.UTC),
-	time.Date(2014, 12, 29, 0, 0, 0, 0, time.UTC),
-	time.Date(2014, 12, 30, 0, 0, 0, 0, time.UTC),
-	time.Date(2014, 12, 31, 0, 0, 0, 0, time.UTC),
-	time.Date(2015, 1,  1,  0, 0, 0, 0, time.UTC),
-	time.Date(2015, 1,  2,  0, 0, 0, 0, time.UTC),
-	time.Date(2015, 1,  3,  0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 21, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 22, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 23, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 24, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 25, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 26, 0, 0, 0, 0, time.UTC),
+	time.Date(2014, 12, 27, 0, 0, 0, 0, time.UTC),
 }
 
 func Test_NormalUsage(t *testing.T) {
@@ -152,5 +152,33 @@ func Test_PreviousWeek (t *testing.T) {
 
 	if errA != nil {
 		t.Error(errA.Error())
+	}
+}
+
+func Test_YearsVerge (t *testing.T) {
+	var weekA, _ = NewWeek(2015, 53)
+	var nextWeek, _ = weekA.Next()
+	if nextWeek.Number != 2 {
+		t.Errorf("Unexpected Week.Next() at the verge of years, \n expected %v, \n given %v", 2, nextWeek.Number)
+	}
+
+	var weekB, _ = NewWeek(2015, 1)
+	var previousWeek, _ = weekB.Previous()
+	if previousWeek.Number != 52 {
+		t.Errorf("Unexpected Week.Previous() at the verge of years, \n expected %v, \n given %v", 52, previousWeek.Number)
+	}
+}
+
+func Test_YearsVergeWithoutNextAndPreviousWeekFixing (t *testing.T) {
+	var weekA, _ = NewWeek(2016, 53)
+	var nextWeek, _ = weekA.Next()
+	if nextWeek.Number != 1 {
+		t.Errorf("Unexpected Week.Next() at the verge of years (without fixing), \n expected %v, \n given %v", 1, nextWeek.Number)
+	}
+
+	var weekB, _ = NewWeek(2017, 1)
+	var previousWeek, _ = weekB.Previous()
+	if previousWeek.Number != 53 {
+		t.Errorf("Unexpected Week.Previous() at the verge of years (without fixing), \n expected %v, \n given %v", 53, previousWeek.Number)
 	}
 }

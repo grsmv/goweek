@@ -72,11 +72,11 @@ func (week *Week) Next() (*Week, error) {
 		newYear = week.Year
 		newWeek = week.Number + 1
 	}
-	w, e := NewWeek(newYear, newWeek)
+	w, e := NewWeek(newYear, newWeek, week.FirstDay)
 
 	// fixing special cases on the verge of years
 	if week.Number == 53 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek + 1)
+		w, e = NewWeek(newYear, newWeek + 1, week.FirstDay)
 	}
 
 	return w, e
@@ -91,11 +91,11 @@ func (week *Week) Previous() (*Week, error) {
 		newYear = week.Year
 		newWeek = week.Number - 1
 	}
-	w, e := NewWeek(newYear, newWeek)
+	w, e := NewWeek(newYear, newWeek, week.FirstDay)
 
 	// fixing special cases on the verge of years
 	if week.Number == 1 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek - 1)
+		w, e = NewWeek(newYear, newWeek - 1, week.FirstDay)
 	}
 
 	return w, e

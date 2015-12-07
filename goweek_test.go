@@ -156,16 +156,18 @@ func Test_PreviousWeek (t *testing.T) {
 }
 
 func Test_YearsVerge (t *testing.T) {
-	var weekA, _ = NewWeek(2015, 53)
+	var weekA, _ = NewWeek(2015, 53, 1)
 	var nextWeek, _ = weekA.Next()
 	if nextWeek.Number != 2 {
 		t.Errorf("Unexpected Week.Next() at the verge of years, \n expected %v, \n given %v", 2, nextWeek.Number)
+		t.Errorf("expected %v, \n %v", weekA.Days, nextWeek.Days)
 	}
 
-	var weekB, _ = NewWeek(2015, 1)
+	var weekB, _ = NewWeek(2015, 1, 1)
 	var previousWeek, _ = weekB.Previous()
 	if previousWeek.Number != 52 {
 		t.Errorf("Unexpected Week.Previous() at the verge of years, \n expected %v, \n given %v", 52, previousWeek.Number)
+		t.Errorf("expected %v, \n %v", weekB.Days, previousWeek.Days)
 	}
 }
 

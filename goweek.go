@@ -1,9 +1,9 @@
 package goweek
 
 import (
-	"time"
 	"errors"
 	"reflect"
+	"time"
 )
 
 type Week struct {
@@ -23,7 +23,7 @@ func NewWeek(params ...int) (*Week, error) {
 	} else {
 		var (
 			week                = initWeek(params...)
-			approximateDay      = (week.Number-1) * 7  // converting from human-readable to machine notation
+			approximateDay      = (week.Number - 1) * 7 // converting from human-readable to machine notation
 			approximateFirstDay = 0
 			commonNumberOfDays  = 0
 			monthNumber         = 0
@@ -76,7 +76,7 @@ func (week *Week) Next() (*Week, error) {
 
 	// fixing special cases on the verge of years
 	if week.Number == 53 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek + 1, week.FirstDay)
+		w, e = NewWeek(newYear, newWeek+1, week.FirstDay)
 	}
 
 	return w, e
@@ -95,7 +95,7 @@ func (week *Week) Previous() (*Week, error) {
 
 	// fixing special cases on the verge of years
 	if week.Number == 1 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek - 1, week.FirstDay)
+		w, e = NewWeek(newYear, newWeek-1, week.FirstDay)
 	}
 
 	return w, e

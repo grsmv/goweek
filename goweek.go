@@ -1,16 +1,14 @@
 package goweek
 
 import (
-	"time"
 	"errors"
-	"reflect"
+	"time"
 )
 
 type Week struct {
-	Days     []time.Time
-	Year     int
-	Number   int
-	FirstDay int
+	Days   []time.Time
+	Year   int
+	Number int
 }
 
 func NewWeek(params ...int) (*Week, error) {
@@ -22,41 +20,34 @@ func NewWeek(params ...int) (*Week, error) {
 		return &Week{}, errors.New("NewWeek(): number of week can't be less than 1 or greater than 53")
 	} else {
 		var (
-			week                = initWeek(params...)
-			approximateDay      = (week.Number-1) * 7  // converting from human-readable to machine notation
-			approximateFirstDay = 0
-			commonNumberOfDays  = 0
-			monthNumber         = 0
+			week = initWeek(params...)
+			day  = 1
+			fd   = time.Date(week.Year, 1, day, 0, 0, 0, 0, time.UTC)
+			y, w = fd.ISOWeek()
 		)
 
-		for index, numberOfDaysInMonth := range numberOfDays(week.Year) {
-			if approximateDay >= commonNumberOfDays && approximateDay <= commonNumberOfDays+numberOfDaysInMonth {
-				monthNumber = index
-				break
-			} else {
-				commonNumberOfDays += numberOfDaysInMonth
-			}
+		for y != week.Year && w > 1 {
+			day++
+			fd = time.Date(week.Year, 1, day, 0, 0, 0, 0, time.UTC)
+			y, w = fd.ISOWeek()
 		}
 
-		approximateFirstDay = approximateDay - commonNumberOfDays
-
-		// workaround for calculation of day number in first week of the year
-		if approximateFirstDay == 0 {
-			approximateFirstDay = 1
+		// getting Monday of the 1st week
+		for fd.Weekday() > 1 {
+			day--
+			fd = time.Date(week.Year, 1, day, 0, 0, 0, 0, time.UTC)
 		}
 
-		// workaround for calculation of day number in last week of the year
-		if approximateFirstDay == -1 {
-			monthNumber = 11
-			approximateFirstDay = numberOfDays(week.Year)[monthNumber] - 2
+		// getting first day of the given week
+		var weekNumber = week.Number
+		for weekNumber > 1 {
+			fd = fd.Add(7 * 24 * time.Hour)
+			weekNumber--
 		}
 
-		// composing week listing
-		var estimatedDate = time.Date(week.Year, time.Month(monthNumber+1), approximateFirstDay, 0, 0, 0, 0, time.UTC)
-		var estimatedFirstDayOfTheWeek = estimatedDate.AddDate(0, 0, -1*int(estimatedDate.Weekday()))
-
-		for i := week.FirstDay; i <= week.FirstDay+6; i++ {
-			week.Days = append(week.Days, estimatedFirstDayOfTheWeek.AddDate(0, 0, i))
+		// getting dates for whole week
+		for i := 0; i < 7; i++ {
+			week.Days = append(week.Days, fd.Add(time.Duration(i)*24*time.Hour))
 		}
 
 		return &week, nil
@@ -72,12 +63,7 @@ func (week *Week) Next() (*Week, error) {
 		newYear = week.Year
 		newWeek = week.Number + 1
 	}
-	w, e := NewWeek(newYear, newWeek, week.FirstDay)
-
-	// fixing special cases on the verge of years
-	if week.Number == 53 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek + 1, week.FirstDay)
-	}
+	w, e := NewWeek(newYear, newWeek)
 
 	return w, e
 }
@@ -91,12 +77,7 @@ func (week *Week) Previous() (*Week, error) {
 		newYear = week.Year
 		newWeek = week.Number - 1
 	}
-	w, e := NewWeek(newYear, newWeek, week.FirstDay)
-
-	// fixing special cases on the verge of years
-	if week.Number == 1 && reflect.DeepEqual(week.Days, w.Days) {
-		w, e = NewWeek(newYear, newWeek - 1, week.FirstDay)
-	}
+	w, e := NewWeek(newYear, newWeek)
 
 	return w, e
 }
@@ -106,31 +87,5 @@ func initWeek(params ...int) Week {
 		Year:   params[0],
 		Number: params[1],
 	}
-
-	if len(params) < 3 {
-		week.FirstDay = 0
-	} else {
-		week.FirstDay = params[2]
-	}
 	return week
-}
-
-func isLeapYear(year int) bool {
-	if year%4 > 0 {
-		return false
-	} else if year%100 > 0 {
-		return true
-	} else if year%400 > 0 {
-		return false
-	} else {
-		return true
-	}
-}
-
-func numberOfDays(year int) (numbers []int) {
-	numbers = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-	if isLeapYear(year) {
-		numbers[1] = 29
-	}
-	return
 }

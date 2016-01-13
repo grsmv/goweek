@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/grsmv/goweek.svg)](https://travis-ci.org/grsmv/goweek)
 
-Simple library for working with week entities for Go programming language. Rewrite of old [Ruby gem](https://github.com/grsmv/week)
+Simple ISO 8601-compatible library for working with week entities for Go programming language. 
+Rewrite of old [Ruby gem](https://github.com/grsmv/week)
 
 #### Usage:
 
@@ -13,9 +14,8 @@ import "github.com/grsmv/goweek"
 // initializing goweek.Week struct:
 //                          year 
 //                          |     week number (starting from 1)
-//                          |     |   Monday as a first day of the week (optional)
-//                          |     |   |
-week, err := goweek.NewWeek(2015, 46, 1)
+//                          |     |
+week, err := goweek.NewWeek(2015, 46)
 
 // retrieving slice with days (`time.Time` instances) for a given week:
 week.Days()
@@ -25,10 +25,6 @@ nextWeek, err := week.Next()
 
 // retrieving `goweek.Week` instance for a previous week:
 previousWeek, err := week.Previous()
-
-// additionally, you can set up Monday (Sunday setted up by default) as a first day 
-// of the week, specifying third parameter during initialisation:
-week, err := goweek.NewWeek(2015, 46, 1)
 ```
 
 #### License:

@@ -60,13 +60,13 @@ var expectedDaysForPreviousWeekWithYearSwitch = []time.Time{
 func Test_NormalUsage(t *testing.T) {
 	var week, _ = NewWeek(2015, 46)
 	if len(week.Days) != 7 {
-		t.Error("Unexpected number of Week.Days, \n expected %v, \n given %v", 7, len(week.Days))
+		t.Errorf("Unexpected number of Week.Days, \n expected %v, \n given %v", 7, len(week.Days))
 	}
 	if week.Year != 2015 {
-		t.Error("Unexpected Week.Year, \n expected %v, \n given %v", 2015, week.Year)
+		t.Errorf("Unexpected Week.Year, \n expected %v, \n given %v", 2015, week.Year)
 	}
 	if week.Number != 46 {
-		t.Error("Unexpected Week.Number, \n expected %v, \n given %v", 46, week.Number)
+		t.Errorf("Unexpected Week.Number, \n expected %v, \n given %v", 46, week.Number)
 	}
 	if !reflect.DeepEqual(expectedDays, week.Days) {
 		t.Errorf("Unexpected Week.Days, \n expected %v, \n given %v", expectedDays, week.Days)

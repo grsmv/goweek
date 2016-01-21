@@ -16,7 +16,7 @@ var expectedDays = []time.Time{
 	time.Date(2015, 11, 15, 0, 0, 0, 0, time.UTC),
 }
 
-var expectedDaysForNextWeek = []time.Time {
+var expectedDaysForNextWeek = []time.Time{
 	time.Date(2015, 11, 16, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 17, 0, 0, 0, 0, time.UTC),
 	time.Date(2015, 11, 18, 0, 0, 0, 0, time.UTC),
@@ -28,13 +28,13 @@ var expectedDaysForNextWeek = []time.Time {
 
 // assuming that in case of 2015 year last week of 2015 in first week of 2016
 var expectedDaysForNextWeekWithYearSwitch = []time.Time{
-	time.Date(2016, 1,  4,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  5,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  6,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  7,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  8,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  9,  0, 0, 0, 0, time.UTC),
-	time.Date(2016, 1,  10, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 4, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 5, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 6, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 7, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 8, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 9, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 1, 10, 0, 0, 0, 0, time.UTC),
 }
 
 var expectedDaysForPreviousWeek = []time.Time{
@@ -51,10 +51,10 @@ var expectedDaysForPreviousWeekWithYearSwitch = []time.Time{
 	time.Date(2014, 12, 29, 0, 0, 0, 0, time.UTC),
 	time.Date(2014, 12, 30, 0, 0, 0, 0, time.UTC),
 	time.Date(2014, 12, 31, 0, 0, 0, 0, time.UTC),
-	time.Date(2015,  1,  1, 0, 0, 0, 0, time.UTC),
-	time.Date(2015,  1,  2, 0, 0, 0, 0, time.UTC),
-	time.Date(2015,  1,  3, 0, 0, 0, 0, time.UTC),
-	time.Date(2015,  1,  4, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1, 1, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1, 2, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1, 3, 0, 0, 0, 0, time.UTC),
+	time.Date(2015, 1, 4, 0, 0, 0, 0, time.UTC),
 }
 
 func Test_NormalUsage(t *testing.T) {
@@ -95,7 +95,7 @@ func Test_ErrorThrowing(t *testing.T) {
 	}
 }
 
-func Test_NextWeek (t *testing.T) {
+func Test_NextWeek(t *testing.T) {
 	var week, _ = NewWeek(2015, 46)
 	var nextWeek, _ = week.Next()
 	if !reflect.DeepEqual(expectedDaysForNextWeek, nextWeek.Days) {
@@ -113,7 +113,7 @@ func Test_NextWeek (t *testing.T) {
 	}
 }
 
-func Test_PreviousWeek (t *testing.T) {
+func Test_PreviousWeek(t *testing.T) {
 	var week, _ = NewWeek(2015, 46)
 	var previousWeek, _ = week.Previous()
 	if !reflect.DeepEqual(expectedDaysForPreviousWeek, previousWeek.Days) {
@@ -131,7 +131,7 @@ func Test_PreviousWeek (t *testing.T) {
 	}
 }
 
-func Test_ISOWeek_Compatibility (t *testing.T) {
+func Test_ISOWeek_Compatibility(t *testing.T) {
 	var week, _ = NewWeek(2016, 1)
 	var w, y = week.Days[0].ISOWeek()
 	var weekDay = week.Days[0].Weekday()

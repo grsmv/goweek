@@ -1,6 +1,7 @@
 ### Goweek
 
 [![Build Status](https://travis-ci.org/grsmv/goweek.svg)](https://travis-ci.org/grsmv/goweek)
+![Goreport](http://goreportcard.com/badge/grsmv/goweek)
 
 Simple ISO 8601-compatible library for working with week entities for Go programming language. 
 Rewrite of old [Ruby gem](https://github.com/grsmv/week)

@@ -57,6 +57,16 @@ var expectedDaysForPreviousWeekWithYearSwitch = []time.Time{
 	time.Date(2015, 1, 4, 0, 0, 0, 0, time.UTC),
 }
 
+var expectedDaysForPreviousWeekWithYearSwitch2017 = []time.Time{
+	time.Date(2016, 12, 26, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 12, 27, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 12, 28, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 12, 29, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 12, 30, 0, 0, 0, 0, time.UTC),
+	time.Date(2016, 12, 31, 0, 0, 0, 0, time.UTC),
+	time.Date(2017, 1, 1, 0, 0, 0, 0, time.UTC),
+}
+
 func Test_NormalUsage(t *testing.T) {
 	var week, _ = NewWeek(2015, 46)
 	if len(week.Days) != 7 {
@@ -128,6 +138,16 @@ func Test_PreviousWeek(t *testing.T) {
 
 	if errA != nil {
 		t.Error(errA.Error())
+	}
+
+	var weekB, _ = NewWeek(2017, 1)
+	var previousWeekB, errB = weekB.Previous()
+	if !reflect.DeepEqual(expectedDaysForPreviousWeekWithYearSwitch2017, previousWeekB.Days) {
+		t.Errorf("Unexpected Week.Previous() with year switch, \n expected %v, \n given %v", expectedDaysForPreviousWeekWithYearSwitch2017, previousWeekB.Days)
+	}
+
+	if errB != nil {
+		t.Error(errB.Error())
 	}
 }
 

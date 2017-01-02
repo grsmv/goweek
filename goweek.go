@@ -76,7 +76,7 @@ func (week *Week) Previous() (*Week, error) {
 	var newYear, newWeek int
 	if week.Number-1 < 1 {
 		newYear = week.Year - 1
-		newWeek = 53
+		newWeek = 52
 	} else {
 		newYear = week.Year
 		newWeek = week.Number - 1

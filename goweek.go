@@ -42,10 +42,9 @@ func NewWeek(params ...int) (*Week, error) {
 	}
 
 	// getting first day of the given week
-	var weekNumber = week.Number
-	for weekNumber > 1 {
-		fd = fd.Add(7 * 24 * time.Hour)
-		weekNumber--
+	fd = fd.AddDate(0, 0, (week.Number-1)*7)
+	for fd.Year() > y {
+		fd = fd.AddDate(0, 0, -7)
 	}
 
 	// getting dates for whole week
@@ -76,7 +75,7 @@ func (week *Week) Previous() (*Week, error) {
 	var newYear, newWeek int
 	if week.Number-1 < 1 {
 		newYear = week.Year - 1
-		newWeek = 52
+		newWeek = 53
 	} else {
 		newYear = week.Year
 		newWeek = week.Number - 1
